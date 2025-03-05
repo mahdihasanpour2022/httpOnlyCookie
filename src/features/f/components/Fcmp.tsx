@@ -1,10 +1,15 @@
 "use client";
+import Link from "next/link";
 // import Cookies from "universal-cookie";
 import { setHttpOnlyCookie } from "@/utils/setHttpOnlyCookie";
 import { getHttpOnlyCookie } from "@/utils/getHttpOnlyCookie";
 import { removeHttpOnlyCookie } from "@/utils/removeHttpOnlyCookie";
 import { universalCookieHandler } from "@/utils/universalCookieHandler";
-import { useRefreshTokenDataStore } from "@/stores/useRefreshTokenDataStore";
+import { useCookie } from "@/providers/CookieContext";
+// import { useCookieStore } from "@/store/cookieStore";
+
+// import {  useRefreshTokenDataStore } from "@/stores/useRefreshTokenDataStore";
+// import { refreshTokenStore  } from "@/stores/useRefreshTokenDataStore";
 
 const Fcmp = ({ name }: { name: string | null }) => {
   // const cookies = new Cookies();
@@ -14,8 +19,17 @@ const Fcmp = ({ name }: { name: string | null }) => {
   //   csrAllCookies
   // );
 
-  const refreshToken = useRefreshTokenDataStore((state) => state.refreshToken);
-  console.log("refreshToken get in client by zustand", refreshToken);
+  // const refreshToken = useRefreshTokenDataStore((state) => state.refreshToken);
+  //  const { refreshToken } = refreshTokenStore();
+  // console.log("refreshToken in FCmp", refreshToken);
+
+  // with context
+  const { cookie } = useCookie();
+  console.log("cookie :", cookie);
+
+  // with zustand
+  // const cookie = useCookieStore((state) => state.cookie);
+  //   console.log("cookie :", cookie);
 
   return (
     <>
@@ -180,6 +194,13 @@ const Fcmp = ({ name }: { name: string | null }) => {
             </button>
             <button
               type="button"
+              onClick={() => getHttpOnlyCookie({ cookieName: "refreshToken" })}
+              className="border border-gray-300 py-1 px-4 text-gray-300"
+            >
+              get refreshToken cookie
+            </button>
+            <button
+              type="button"
               onClick={() =>
                 removeHttpOnlyCookie({ cookieName: "refreshToken" })
               }
@@ -208,6 +229,11 @@ const Fcmp = ({ name }: { name: string | null }) => {
           </button>
         </div>
       </div>
+      <Link href="/g">
+        <li className="border w-64 mx-auto py-4 rounded-full font-bold text-black text-center mt-4">
+          test cookie___(g)
+        </li>
+      </Link>
     </>
   );
 };

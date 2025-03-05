@@ -2,7 +2,7 @@
 import useGetPodProfile from "@/features/e/hooks/useGetPodProfile";
 import useGetFavoritesProducts from "@/features/e/hooks/useGetFavoritesProducts";
 import useGetUserAddresses from "@/features/e/hooks/useGetUserAddresses";
-import { useUserDataStore } from "@/stores/useUserDataStore";
+import { useUserDataStore } from "@/store/useUserDataStore";
 
 const Dcmp = () => {
   const userLoginData = useUserDataStore((state) => state.userLoginData);

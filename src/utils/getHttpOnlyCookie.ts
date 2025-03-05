@@ -4,17 +4,11 @@ export const getHttpOnlyCookie = ({ cookieName }: { cookieName: string }) => {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify({ cookieName }),
   })
     .then((response) => response.json())
-    .then((data) => {
-      if (data.error) {
-        // console.log(`data for get ${cookieName} cookie:`, data);
-        console.log(`${JSON.stringify(data)}`);
-      } else {
-        console.log(data.cookieValue.name);
-      }
-    })
+    .then((data) => console.log(`data for get ${cookieName} cookie:`, data))
     .catch((error) =>
       console.error(`error for get ${cookieName} cookie:`, error)
     );

@@ -9,9 +9,11 @@ export const removeHttpOnlyCookie = ({
       "Content-Type": "application/json",
     },
     credentials: "include",
-    body: JSON.stringify({ cookieName}),
+    body: JSON.stringify({ cookieName }),
   })
     .then((response) => response.json())
     .then((data) => console.log(`data for remove ${cookieName} cookie:`, data))
-    .catch((error) => console.error(`error for remove ${cookieName} cookie:`, error));
+    .catch((error) =>
+      console.error(`error for remove ${cookieName} cookie:`, error)
+    );
 };

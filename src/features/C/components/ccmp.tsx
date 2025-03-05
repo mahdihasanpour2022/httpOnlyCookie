@@ -1,6 +1,6 @@
 "use client";
 import useGetPodProfile from "@/features/e/hooks/useGetPodProfile";
-import { useUserDataStore } from "@/stores/useUserDataStore";
+import { useUserDataStore } from "@/store/useUserDataStore";
 
 const Ccmp = () => {
   const userLoginData = useUserDataStore((state) => state.userLoginData);

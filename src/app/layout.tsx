@@ -2,7 +2,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import QueryClientProvider from "@/providers/QueryClientProvider";
 import { cookies } from "next/headers";
-import { refreshTokenStore } from "@/stores/useRefreshTokenDataStore";
+// import { refreshTokenStore } from "@/stores/useRefreshTokenDataStore";
+import { CookieProvider } from "@/providers/CookieContext";
+// import { useCookieStore } from "@/store/cookieStore";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,12 +27,12 @@ export default async function RootLayout({
   //   cookieValue?.refreshToken
   // );
 
-  const { refreshToken, setRefreshToken } = refreshTokenStore();
-  setRefreshToken(cookieValue?.refreshToken);
-  console.log(
-    "next/headers get by refreshToken so set in layout by zusatand",
-    refreshToken
-  );
+  // const { refreshToken, setRefreshToken } = refreshTokenStore();
+  // setRefreshToken(cookieValue?.refreshToken);
+  // console.log("refreshToken in layout", refreshToken);
+
+// with zustand 
+// useCookieStore.setState({ cookie: cookieValue });
 
   return (
     <html lang="en">
@@ -38,7 +40,9 @@ export default async function RootLayout({
         <QueryClientProvider>
           {/* <DisableWorkbox /> */}
           {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+          <CookieProvider initialCookie={cookieValue?.refreshToken}>
           {children}
+          </CookieProvider>
         </QueryClientProvider>
       </body>
     </html>

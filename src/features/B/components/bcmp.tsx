@@ -1,5 +1,5 @@
 "use client";
-import { useCounterStore } from "@/stores/counterStore";
+import { useCounterStore } from "@/store/counterStore";
 import { useShallow } from "zustand/shallow";
 
 const Bcmp = () => {

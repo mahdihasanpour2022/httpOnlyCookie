@@ -2,7 +2,7 @@
 import useGetPodProfile from "@/features/e/hooks/useGetPodProfile";
 import useGetUserAddresses from "@/features/e/hooks/useGetUserAddresses";
 import useGetFavoritesProducts from "@/features/e/hooks/useGetFavoritesProducts";
-import { useUserDataStore } from "@/stores/useUserDataStore";
+import { useUserDataStore } from "@/store/useUserDataStore";
 
 const Ecmp = () => {
   const userLoginData = useUserDataStore((state) => state.userLoginData);
@@ -18,10 +18,10 @@ const Ecmp = () => {
 
   return (
     <div className="flex flex-col gap-4 w-full h-screen py-32 items-center">
-        <div className="text-center border my-2">
+      <div className="text-center border my-2">
         {JSON.stringify(userLoginData)}
       </div>
-      {podProfileData && (<p>{podProfileData?.singleResult.name}</p>)}
+      {podProfileData && <p>{podProfileData?.singleResult.name}</p>}
       {userAddressesData && (
         <p>{userAddressesData.result?.[0].simpleAddress}</p>
       )}

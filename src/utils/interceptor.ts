@@ -9,7 +9,7 @@ import Axios, {
 import qs from "qs";
 import Cookies from "universal-cookie";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
-import { userDataStore } from "@/stores/useUserDataStore";
+import { userDataStore } from "@/store/useUserDataStore";
 // import { cookies } from "next/headers";
 
 const API: AxiosInstance = Axios.create({

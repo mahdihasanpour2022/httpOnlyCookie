@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CommonRes } from "@/interfaces/commonRes";
-import { userDataStore } from "@/stores/useUserDataStore";
+import { userDataStore } from "@/store/useUserDataStore";
 import API from "@/utils/interceptor";
 
 import {
@@ -65,8 +65,14 @@ UseQueryOptions<TData, TError> & {
     queryRes?.data?.["accessToken"] &&
     queryRes.data["accessToken"] !== userLoginData?.accessToken
   ) {
-    console.log("access token in data recived in client RQFecher hook >>>>>>>>>>>>>>>>> 1", queryRes.data["accessToken"]);
-    console.log(" state management access in client RQFecher hook >>>>>>>>>>>>>>>>> 2", userLoginData);
+    console.log(
+      "access token in data recived in client RQFecher hook >>>>>>>>>>>>>>>>> 1",
+      queryRes.data["accessToken"]
+    );
+    console.log(
+      " state management access in client RQFecher hook >>>>>>>>>>>>>>>>> 2",
+      userLoginData
+    );
 
     changeData({
       accessToken: queryRes.data["accessToken"],

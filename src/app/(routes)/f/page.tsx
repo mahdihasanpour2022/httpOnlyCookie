@@ -10,7 +10,7 @@ const page = async () => {
   // const allCookies = cookieStore.getAll();
   // console.log("همه کوکی هایی که سمت سرور داریم میگیریم  :", allCookies);
 
-  const ssrCookie = cookieStore.get("ssrCookie _ set in csr");
+  const ssrCookie = cookieStore.get("refreshToken");
   const cookieValue = ssrCookie?.value
     ? JSON.parse(ssrCookie.value)
     : undefined;

@@ -1,13 +1,12 @@
 "use client";
 import Link from "next/link";
-import { useUserDataStore } from "@/stores/useUserDataStore";
+import { useUserDataStore } from "@/store/useUserDataStore";
 // import { useEffect } from "react";
 
 export default function Home() {
   const userLoginData = useUserDataStore((state) => state.userLoginData);
   const changeData = useUserDataStore((state) => state.changeData);
   const clearData = useUserDataStore((state) => state.clearData);
-
 
   // useEffect(() => {
   //   // fetch("/api/user", {
