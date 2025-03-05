@@ -68,6 +68,7 @@ export const useUserDataStore = create<NameStore>()(
           if (localValue) {
             const parsedValue = JSON.parse(localValue);
             // اگر کوکی فاقد مقدار باشد، کوکی را همزمان با استیت به کمک لوکال استوریج به‌روزرسانی کنید
+
             if (!cookieValue) {
               cookies.set(key, parsedValue, {
                 path: "/",
@@ -93,7 +94,9 @@ export const useUserDataStore = create<NameStore>()(
           // return Promise.resolve(null);
         },
         setItem: async (key, value) => {
-          // console.log("set item in zustand runed ....", key, value);
+          console.log("key set item in zustand runed ....", key);
+          console.log("value set item in zustand runed ....", value);
+
           // با هر تغییر استیت بلافاصله در کوکی و لوکال اپدیت میشود
           const parsedValue = value ? JSON.parse(value) : {};
 
@@ -106,7 +109,12 @@ export const useUserDataStore = create<NameStore>()(
             // const cookieStore = await cookies();
             // const userDataCookie = cookieStore.get("userData");
             // console.log("mehdi 1:", userDataCookie);
-            
+
+            // console.log(
+            //   "currentUserData :",
+            //   currentUserData.userLoginData.accessToken
+            // );
+
             // ذخیره کوکی سمت کلاینت
             cookies.set(key, currentUserData, {
               path: "/",

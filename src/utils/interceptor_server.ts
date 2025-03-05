@@ -225,28 +225,28 @@ const refreshAuthLogic = async (failedRequest: AxiosError) => {
         return;
       }
 
-      // try {
-      //   fetch("http://localhost:3000/api/setCookie", {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({
-      //       cookieName: "accessTokenCookie",
-      //       cookieData: { accessToken: data.accessToken },
-      //       options: {
-      //         secure: false,
-      //         httpOnly: false,
-      //       },
-      //     }),
-      //     credentials: "include",
-      //   })
-      //     .then((response) => response.json())
-      //     .then((data) => console.log("setting cookie: :", data))
-      //     .catch((error) => console.error("Error setting cookie:", error));
-      // } catch (error: any) {
-      //   console.log("error in setcookie ssr :", error);
-      // }
+      try {
+        fetch("http://localhost:3000/api/setCookie", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cookieName: "accessTokenCookie",
+            cookieData: { accessToken: data.accessToken },
+            options: {
+              secure: false,
+              httpOnly: false,
+            },
+          }),
+          credentials: "include",
+        })
+          .then((response) => response.json())
+          .then((data) => console.log("setting cookie: :", data))
+          .catch((error) => console.error("Error setting cookie:", error));
+      } catch (error: any) {
+        console.log("error in setcookie ssr :", error);
+      }
 
       if (failedRequest?.config?.headers) {
         failedRequest.config.headers["accessToken"] = `${data.accessToken}`;

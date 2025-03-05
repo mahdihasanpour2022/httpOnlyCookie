@@ -1,103 +1,87 @@
 "use server";
 import Fcmp from "@/features/f/components/Fcmp";
-
+// import { getHttpOnlyCookie } from "@/utils/getHttpOnlyCookie";
+// import { setHttpOnlyCookie } from "@/utils/setHttpOnlyCookie";
 import { cookies } from "next/headers";
-// import { setCookie } from './actions';
+
 const page = async () => {
   const cookieStore = await cookies();
   //--------------------------------------------------------------------------- get client cookie in ssr cmp with next/headers
-  const allCookies = cookieStore.getAll();
-  console.log("ssr get allCookies :", allCookies);
+  // const allCookies = cookieStore.getAll();
+  // console.log("همه کوکی هایی که سمت سرور داریم میگیریم  :", allCookies);
 
-  const ssrCookie = cookieStore.get("ssrCookie _set in csr");
-  console.log("ssrCookie >>>>>>> :", ssrCookie);
-  
-  const cookieValue = ssrCookie?.value ? JSON.parse(ssrCookie.value) : undefined;
-  console.log("ssr jafarCookies :", cookieValue);
+  const ssrCookie = cookieStore.get("ssrCookie _ set in csr");
+  const cookieValue = ssrCookie?.value
+    ? JSON.parse(ssrCookie.value)
+    : undefined;
 
-  // await setCookie();
-  // await fetch("http://localhost:3000/api/newSetSsrCookie");
+  // console.log(
+  //   "یک کوکی از نوع httpOnly رو اینجا سمت سرور با next/header گرفتیم :",
+  //   cookieValue
+  // );
 
-  //---------------------------------------------------------------------------set httpOnly : true cookie in ssr cmp with ( Route Handler + next/headers )
-  // await fetch("http://localhost:3000/api/setCookie", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   credentials: "include",
-  //   body: JSON.stringify({
-  //     cookieName: "ssrCookie in ssr",
-  //     cookieData: { name: "ssrCookie set in ssr with api route" },
-  //     options: {
-  //       path: "/",
-  //       secure: true,
-  //       httpOnly: true,
-  //       sameSite: "lax", // lax strict
-  //       maxAge: 1000 * 60 * 60 * 24 * 365,
-  //       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
-  //     },
-  //   }),
-  // })
-  //   .then((response) => response.json())
-  //   .then((data) => console.log(data))
-  //   .catch((error) => console.error("Error setting cookie:", error));
-
-  //---------------------------------------------------------------------------set httpOnly : false cookie in ssr cmp with ( Route Handler + next/headers )
-  // await fetch("http://localhost:3000/api/setCookie", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   credentials: "include",
-  //   body: JSON.stringify({
-  //     cookieName: "csrCookie in ssr",
-  //     cookieData: { name: "csrCookie set in ssr with api route" },
-  //     options: {
-  //       path: "/",
-  //       secure: false,
-  //       httpOnly: false,
-  //       sameSite: "lax", // lax strict
-  //       maxAge: 1000 * 60 * 60 * 24 * 365,
-  //       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
-  //     },
-  //   }),
-  // })
-  //   .then((response) => response.json())
-  //   .then((data) => console.log(data))
-  //   .catch((error) => console.error("Error setting cookie:", error));
-
-  //---------------------------------------------------------------------------get httpOnly : true cookie in ssr cmp with ( Route Handler + next/headers )
-  // await fetch("http://localhost:3000/api/getCookie", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({ cookieName: "httpOnly in csr" }), // ارسال نام کوکی به‌صورت داینامیک
-  // })
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     if (data.error) {
-  //       console.error(data.error);
-  //     } else {
-  //       console.log(`Cookie :`, data.cookieValue);
-  //     }
-  //   })
-  //   .catch((error) => console.error("Error retrieving cookie:", error));
-
-  //---------------------------------------------------------------------------set httpOnly : true cookie in ssr cmp with next/headers مستقیم نمیتونیم استفاده کنیم
-  // Error: Cookies can only be modified in a Server Action or Route Handler.
-  // cookieStore.set("ssr cookie", "lee", {
-  //   path: "/",
-  //   secure: true,
-  //   httpOnly: true,
-  //   sameSite: "lax", // lax strict
-  //   maxAge: 1000 * 60 * 60 * 24 * 365,
-  //   expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+  // -------------------------------------------------------------------------------------------------------------
+  // ایجاد کوکی سمت سرور و دریافت  ان از دو طریق زیر نشدنی است.
+  // await setHttpOnlyCookie({
+  //   cookieName: "a-ssr-cookie",
+  //   cookieData: { name: "gholam-hosein" },
   // });
 
-  // cant set cookie in ssr cmp with universal
+  // console.log(
+  //   "we create a httpOnly cookie named a-ssr-cookie with send req to our server and say successfully created but cant get it by send req to our server",
+  //   getHttpOnlyCookie({ cookieName: "a-ssr-cookie" })
+  // );
+
+  // const ssrCookie1 = cookieStore.get("a-ssr-cookie");
+  // const cookieValue2 = ssrCookie1?.value
+  //   ? JSON.parse(ssrCookie1.value)
+  //   : undefined;
+  // console.log(
+  //   "we create a httpOnly cookie named a-ssr-cookie with send req to our server and say successfully created but cant get it by next/header directly here in server parent cmp",
+  //   cookieValue2
+  // );
+
+  // --------------------------------------------------------------------------------------------------
+  // ---------------------------------------   سه مورد ممنوعه ----------------------------------------
+  // --------------------------------------------------------------------------------------------------
+
+  // 1   -------------------------------------------------------------------------------------------------------------
+  // next/header  مستقیم با این نمیشه سمت سرور ست کرد
+  // httpOnly حتی در کامپوننتی که سرور است نمیتوانیم مستقیم یه کوکی ست کنیم از نوع
+  //  Error: Cookies can only be modified in a Server Action or Route Handler. Read more: https://nextjs.org/docs/app/api-reference/functions/cookies#options
+  // cookieStore.set("aslll", JSON.stringify({ name: "pppp" }), {
+  //   httpOnly: true,
+  //   secure: process.env.NEXT_PUBLIC_ENV === "production",
+  //   sameSite: process.env.NEXT_PUBLIC_ENV === "production" ? "strict" : "lax",
+  //   path: "/",
+  //   maxAge: 60 * 60 * 24 * 7,
+  // });
+
+  // const ssrCookie1 = cookieStore.get("aslll");
+  // const cookieValue2 = ssrCookie1?.value
+  //   ? JSON.parse(ssrCookie1.value)
+  //   : undefined;
+  // console.log("3 :", cookieValue2);
+
+  //  2 ---------------------------------------------------------------------------
+  // httpOnly = false ==>  امکان ست کردن این نوع کوکی سمت سرور نیست
+  // await setHttpOnlyCookie({
+  //   cookieName: "10",
+  //   cookieData: { name: "10" },
+  //   options: {
+  //     path: "/",
+  //     secure: false,
+  //     httpOnly: false,
+  //     sameSite: "lax", // lax strict
+  //     maxAge: 1000 * 60 * 60 * 24 * 365,
+  //     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+  //   },
+  // });
+
+  // 3  ---------------------------------------------------------------------------
+  // universal ==>  با یونیورسال سمت سرور نمیشه کوکی ست کرد
+  // نه httpOnly = trye  و نه httpOnly =false
   // const cookie = new Cookies(); //  universal
-  // //---------------------------------------------------------------------------set client cookie in csr cmp with universal-cookie
   // cookie.set(
   //   "csrCookie _ set in ssr",
   //   { name: "asghar" },
@@ -105,20 +89,6 @@ const page = async () => {
   //     path: "/",
   //     secure: false,
   //     httpOnly: false,
-  //     sameSite: "strict", // lax strict
-  //     maxAge: 1000 * 60 * 60 * 24 * 365,
-  //     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
-  //   }
-  // );
-
-  // //---------------------------------------------------------------------------set server cookie in ssr cmp with universal-cookie
-  // cookie.set(
-  //   "ssrCookie _ set in ssr",
-  //   { name: "asghar" },
-  //   {
-  //     path: "/",
-  //     secure: true,
-  //     httpOnly: true,
   //     sameSite: "strict", // lax strict
   //     maxAge: 1000 * 60 * 60 * 24 * 365,
   //     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
