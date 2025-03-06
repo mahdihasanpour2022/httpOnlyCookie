@@ -1,5 +1,7 @@
 "use server";
+// import { getHttpOnlyCookieeeee } from "@/actions/getHttpOnlyCookieeeee";
 import Fcmp from "@/features/f/components/Fcmp";
+// import { setHttpOnlyCookie } from "@/utils/setHttpOnlyCookie";
 // import { getHttpOnlyCookie } from "@/utils/getHttpOnlyCookie";
 // import { setHttpOnlyCookie } from "@/utils/setHttpOnlyCookie";
 import { cookies } from "next/headers";
@@ -10,10 +12,18 @@ const page = async () => {
   // const allCookies = cookieStore.getAll();
   // console.log("همه کوکی هایی که سمت سرور داریم میگیریم  :", allCookies);
 
+  //  دو روش  برای گرفتن کوکی سمت سرور
+  // next/headers  => روش 1
   const ssrCookie = cookieStore.get("refreshToken");
   const cookieValue = ssrCookie?.value
     ? JSON.parse(ssrCookie.value)
     : undefined;
+
+
+  // server action  => روش 2
+  // با این روش هم میشه با سرور اکشن سمت سرور کوکی رو گرفت
+  // const refreshTokenData = await getHttpOnlyCookieeeee("refreshToken");
+  // console.log("annnnnn 1000", refreshTokenData);
 
   // console.log(
   //   "یک کوکی از نوع httpOnly رو اینجا سمت سرور با next/header گرفتیم :",

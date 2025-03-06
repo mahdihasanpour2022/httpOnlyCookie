@@ -1,42 +1,47 @@
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    // گرفتن اطلاعات از درخواست
     const { cookieName } = await request.json();
-    console.error("cookieName:", cookieName);
 
     if (!cookieName) {
-      return NextResponse.json(
-        { error: "Cookie name is required." },
-        { status: 400 }
-      );
+      return NextResponse.json({
+        isSuccess: false,
+        status: 400,
+        message: "نام کوکی را  برای گرفتن اطلاعات آن وارد نکرده اید",
+        data: null,
+      });
     }
 
-    // گرفتن کوکی‌ها
     const cookieStore = await cookies();
     const cookieValue = cookieStore.get(cookieName);
 
-    console.error("cookieValue:", cookieValue);
     if (!cookieValue) {
-      return NextResponse.json(
-        { error: `Cookie with name "${cookieName}" not found.` },
-        { status: 404 }
-      );
+      return NextResponse.json({
+        isSuccess: false,
+        status: 404,
+        message: `کوکی با نام ${cookieName} وجود ندارد.`,
+        data: null,
+      });
     }
 
-    // برگرداندن مقدار کوکی
     return NextResponse.json({
-      message: "Cookie retrieved successfully",
-      cookieName,
-      cookieValue: JSON.parse(cookieValue.value),
+      isSuccess: true,
+      status: 200,
+      message: "کوکی با موفقیت دریافت شد.",
+      data: {
+        cookieName,
+        cookieValue: JSON.parse(cookieValue.value),
+      },
     });
   } catch (error) {
     console.error("Error retrieving cookie:", error);
-    return NextResponse.json(
-      { error: "Failed to retrieve cookie." },
-      { status: 500 }
-    );
+    return NextResponse.json({
+      isSuccess: false,
+      status: 500,
+      message: "دریافت کوکی ناموفق بود.",
+      data: null,
+    });
   }
 }

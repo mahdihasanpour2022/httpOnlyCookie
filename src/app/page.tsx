@@ -92,22 +92,22 @@ export default function Home() {
       </div>
 
       <ul className="text-center py-2 flex flex-col gap-6 bg-blue-300">
-        {/* <Link href="/a">
+        <Link href="/a">
           <li className="border w-48 mx-auto py-4 rounded-full font-bold text-white border-white">
             server___(a)
           </li>
         </Link>
-        <Link href="/c">
+        {/* <Link href="/c">
           <li className="border w-48 mx-auto py-4 rounded-full font-bold text-white border-white">
             client___(c)
           </li>
-        </Link>
-        <Link href="/d">
+        </Link> */}
+        {/* <Link href="/d">
           <li className="border w-48 mx-auto py-4 rounded-full font-bold text-white border-white">
             server___(d_3call)
           </li>
-        </Link>
-        <Link href="/e">
+        </Link> */}
+        {/* <Link href="/e">
           <li className="border w-48 mx-auto py-4 rounded-full font-bold text-white border-white">
             client___(e_3call)
           </li>

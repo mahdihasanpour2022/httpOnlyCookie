@@ -1,10 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import QueryClientProvider from "@/providers/QueryClientProvider";
-import { cookies } from "next/headers";
-// import { refreshTokenStore } from "@/stores/useRefreshTokenDataStore";
-import { CookieProvider } from "@/providers/CookieContext";
-// import { useCookieStore } from "@/store/cookieStore";
+import RefreshTokenInitializer from "@/providers/RefreshTokenInitializer";
+// import { CookieContextProvider } from "@/providers/CookieContextProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,23 +14,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies();
-  const ssrCookie = cookieStore.get("refreshToken");
-  const cookieValue = ssrCookie?.value
-    ? JSON.parse(ssrCookie.value)
-    : undefined;
 
-  // console.log(
-  //   "refreshToken cookie in layout =============================>>>:",
-  //   cookieValue?.refreshToken
-  // );
-
-  // const { refreshToken, setRefreshToken } = refreshTokenStore();
-  // setRefreshToken(cookieValue?.refreshToken);
-  // console.log("refreshToken in layout", refreshToken);
-
-// with zustand 
-// useCookieStore.setState({ cookie: cookieValue });
 
   return (
     <html lang="en">
@@ -40,9 +22,10 @@ export default async function RootLayout({
         <QueryClientProvider>
           {/* <DisableWorkbox /> */}
           {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-          <CookieProvider initialCookie={cookieValue?.refreshToken}>
-          {children}
-          </CookieProvider>
+          <RefreshTokenInitializer  />
+          {/* <CookieContextProvider> */}
+            {children}
+            {/* </CookieContextProvider> */}
         </QueryClientProvider>
       </body>
     </html>

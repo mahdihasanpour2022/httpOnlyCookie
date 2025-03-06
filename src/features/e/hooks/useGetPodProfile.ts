@@ -17,7 +17,7 @@ const useGetPodProfile = () => {
   const { data, isError } = podProfile;
   useEffect(() => {
     if (isError) {
-      console.log(data);
+      console.log("isError",isError,data);
     }
   }, [isError, data]);
 

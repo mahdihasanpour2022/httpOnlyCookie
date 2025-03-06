@@ -5,11 +5,11 @@ import { setHttpOnlyCookie } from "@/utils/setHttpOnlyCookie";
 import { getHttpOnlyCookie } from "@/utils/getHttpOnlyCookie";
 import { removeHttpOnlyCookie } from "@/utils/removeHttpOnlyCookie";
 import { universalCookieHandler } from "@/utils/universalCookieHandler";
-import { useCookie } from "@/providers/CookieContext";
-// import { useCookieStore } from "@/store/cookieStore";
-
-// import {  useRefreshTokenDataStore } from "@/stores/useRefreshTokenDataStore";
-// import { refreshTokenStore  } from "@/stores/useRefreshTokenDataStore";
+import { ApiResponse } from "@/interfaces/apiResponse";
+// import { useCookie } from "@/providers/CookieContextProvider";
+import { RefreshTokenData } from "@/interfaces/refreshTokenData";
+import { useRefreshTokenInitializerStore } from "@/store/useRefreshTokenInitializerStore";
+import { create } from "@/app/(routes)/f/actions";
 
 const Fcmp = ({ name }: { name: string | null }) => {
   // const cookies = new Cookies();
@@ -19,20 +19,49 @@ const Fcmp = ({ name }: { name: string | null }) => {
   //   csrAllCookies
   // );
 
-  // const refreshToken = useRefreshTokenDataStore((state) => state.refreshToken);
-  //  const { refreshToken } = refreshTokenStore();
-  // console.log("refreshToken in FCmp", refreshToken);
-
   // with context
-  const { cookie } = useCookie();
-  console.log("cookie :", cookie);
+  // const { cookie } = useCookie();
+  // console.log("Fcmp refreshToken :", cookie);
 
   // with zustand
-  // const cookie = useCookieStore((state) => state.cookie);
-  //   console.log("cookie :", cookie);
+  const cookie = useRefreshTokenInitializerStore((state) => state.cookie);
+  // console.log("Fcmp refreshToken :", cookie);
+
+  const setCookieHandler = async () => {
+    const data: ApiResponse = await setHttpOnlyCookie({
+      cookieName: "refreshToken",
+      cookieData: {
+        refreshToken: "d95b792fe15b4c9388ed54b5ec1035cb.XzIwMjUx",
+      },
+    });
+    console.log("data set cookie in FCmp", data);
+  };
+
+  const getCookieHandler = async () => {
+    const data: ApiResponse<RefreshTokenData> = await getHttpOnlyCookie({
+      cookieName: "refreshToken",
+    });
+    console.log("data get cookie in FCmp", data);
+  };
+
+  const removeCookieHandler = async () => {
+    const data: ApiResponse = await removeHttpOnlyCookie({
+      cookieName: "refreshToken",
+    });
+    console.log("data remove cookie in FCmp", data);
+  };
 
   return (
     <>
+      <button onClick={() => create()}>Create</button>
+      <div className="text-center font-bold">
+        {cookie ? cookie : "رفرش توکن رو نداریم"}
+      </div>
+      <Link href="/g">
+        <li className="border w-64 mx-auto py-4 rounded-full font-bold text-black text-center mt-4">
+          test cookie___(g)
+        </li>
+      </Link>
       <div className="border-b w-fll py-6 border-gray-400 text-center h-32 flex flex-col">
         {`یک کوکی از نوع`}
         <span className="">httpOnly</span>
@@ -180,30 +209,21 @@ const Fcmp = ({ name }: { name: string | null }) => {
           <div className="w-full border border-gray-300 p-1 flex flex-col gap-1">
             <button
               type="button"
-              onClick={() =>
-                setHttpOnlyCookie({
-                  cookieName: "refreshToken",
-                  cookieData: {
-                    refreshToken: "14Bd892f69f04aa7b89525a838407f1d.XzIwMjUx",
-                  },
-                })
-              }
+              onClick={setCookieHandler}
               className="border border-gray-300 text-gray-300 py-1 px-4"
             >
               create refreshToken cookie
             </button>
             <button
               type="button"
-              onClick={() => getHttpOnlyCookie({ cookieName: "refreshToken" })}
+              onClick={getCookieHandler}
               className="border border-gray-300 py-1 px-4 text-gray-300"
             >
               get refreshToken cookie
             </button>
             <button
               type="button"
-              onClick={() =>
-                removeHttpOnlyCookie({ cookieName: "refreshToken" })
-              }
+              onClick={removeCookieHandler}
               className="border border-red-200 text-red-200 py-1 px-4"
             >
               remove refreshToken cookie
@@ -229,11 +249,6 @@ const Fcmp = ({ name }: { name: string | null }) => {
           </button>
         </div>
       </div>
-      <Link href="/g">
-        <li className="border w-64 mx-auto py-4 rounded-full font-bold text-black text-center mt-4">
-          test cookie___(g)
-        </li>
-      </Link>
     </>
   );
 };

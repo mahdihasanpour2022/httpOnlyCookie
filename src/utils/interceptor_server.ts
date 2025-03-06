@@ -11,6 +11,10 @@ import qs from "qs";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 // import { userDataStore } from "@/stores/useUserDataStore";
 import { cookies } from "next/headers";
+// import { setHttpOnlyCookie } from "./setHttpOnlyCookie";
+// import { getHttpOnlyCookieeeee } from "@/actions/getHttpOnlyCookieeeee";
+// import { setHttpOnlyCookieeeee } from "@/actions/setHttpOnlyCookieeeee";
+// import { getHttpOnlyCookie } from "./getHttpOnlyCookie";
 // import Cookies from "universal-cookie";
 
 // const isClient = typeof window !== "undefined";
@@ -61,8 +65,8 @@ const requestHandler = async (
   const userDataCookie = cookieStore.get("userData");
   const userCookie = userDataCookie ? JSON.parse(userDataCookie.value) : null;
 
-  const userDataCookieaLL = cookieStore.getAll();
-  console.log("userDataCookieaLL ==============>:", userDataCookieaLL);
+  // const userDataCookieaLL = cookieStore.getAll();
+  // console.log("userDataCookieaLL ==============>:", userDataCookieaLL);
 
   // console.log("6565655 :", userCookie.userLoginData?.accessToken, isClient);
 
@@ -172,34 +176,21 @@ API.interceptors.response.use(
 );
 
 const refreshAuthLogic = async (failedRequest: AxiosError) => {
-  // console.log("refresh runed ...");
-
   const cookieStore = await cookies();
-  const userDataCookie = cookieStore.get("userData");
-  const { userLoginData } = userDataCookie
-    ? JSON.parse(userDataCookie.value)
+  const refreshTokenCookie = cookieStore.get("refreshToken");
+  const { refreshToken } = refreshTokenCookie
+    ? JSON.parse(refreshTokenCookie.value)
     : null;
+  console.log("demble in refreshAuthLogic:", refreshToken);
 
-  if (!userLoginData || !userLoginData.refreshToken) {
-    console.error("Missing user login data or refresh token");
-    return Promise.reject(new Error("User is not authenticated"));
+  // باید اینجا رفرش را گرفته بدهیم به نود در ان روت مربوط به رفرش
+  if (!refreshToken) {
+    // console.log("رفرش توکن در اینترسپتور برای فرایند رفرش توکن یافت نشد");
+    return Promise.reject();
   }
 
-  console.log(
-    "userLoginData.accessToken ssr:",
-    userLoginData.accessToken,
-    failedRequest?.config?.url
-  );
-
-  // console.log(
-  //   "serverSideAccessToken ***********************************************:",
-  //   serverSideAccessToken,
-  //   userLoginData.refreshToken,
-  //   !!(
-  //     serverSideAccessToken?.userRefreshToken &&
-  //     serverSideAccessToken?.userRefreshToken !== userLoginData.refreshToken
-  //   )
-  // );
+  // const refreshTokenData = await getHttpOnlyCookieeeee("refreshToken");
+  // console.log("annnnnn 1000", refreshTokenData);
 
   return await fetch(`http://localhost:3000/api/refreshTokenSsr`, {
     method: "POST",
@@ -207,22 +198,21 @@ const refreshAuthLogic = async (failedRequest: AxiosError) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      accessToken: userLoginData.accessToken,
-      refreshToken: userLoginData.refreshToken,
+      refreshToken,
     }),
+    // body: JSON.stringify({}),
     credentials: "include",
   })
     .then((res) => {
-      console.log("res :", res);
       if (!res.ok) {
         throw new Error(`Error: ${res.status}`);
       }
       return res.json();
     })
-    .then((data) => {
-      // console.log("data :", data);
-      if (!data?.accessToken || !data?.refreshToken) {
-        return;
+    .then(async (data) => {
+      console.log("data 500", data);
+      if (!data?.data?.accessToken || !data?.data?.refreshToken) {
+        return Promise.reject();
       }
 
       try {
@@ -231,35 +221,67 @@ const refreshAuthLogic = async (failedRequest: AxiosError) => {
           headers: {
             "Content-Type": "application/json",
           },
+          credentials: "include",
           body: JSON.stringify({
-            cookieName: "accessTokenCookie",
-            cookieData: { accessToken: data.accessToken },
+            cookieName: "accessToken",
+            cookieData: { accessToken: data?.data?.accessToken },
             options: {
-              secure: false,
               httpOnly: false,
+              secure: false,
+              sameSite: "lax",
+              path: "/",
+              maxAge: 60 * 60 * 24 * 7,
             },
           }),
-          credentials: "include",
         })
           .then((response) => response.json())
-          .then((data) => console.log("setting cookie: :", data))
-          .catch((error) => console.error("Error setting cookie:", error));
+          .then((data) => {
+            console.log("Cookie Set:", data);
+          })
+          .catch((error) => {
+            console.error("Error setting cookie:", error);
+          });
       } catch (error: any) {
         console.log("error in setcookie ssr :", error);
       }
 
+      // try {
+      //   fetch("http://localhost:3000/api/setttttCookie", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify({
+      //       cookieName: "accessToken",
+      //       cookieData: data?.data?.accessToken,
+      //     }),
+      //     credentials: 'include',
+      //   })
+      //     .then((response) => response.json())
+      //     .then((data) => {
+      //       console.log("Cookie Set:", data);
+      //     })
+      //     .catch((error) => {
+      //       console.error("Error setting cookie:", error);
+      //     });
+      // } catch (error: any) {
+      //   console.log("error in setcookie ssr :", error);
+      // }
+
       if (failedRequest?.config?.headers) {
-        failedRequest.config.headers["accessToken"] = `${data.accessToken}`;
+        failedRequest.config.headers[
+          "accessToken"
+        ] = `${data.data.accessToken}`;
         console.log(
           "failedRequest laaaaaaaaaaast :",
           failedRequest.config.url,
-          data.accessToken
+          data.data.accessToken
         );
         return Promise.resolve();
       }
     })
     .catch((error) => {
-      console.error("Error fetching refresh-token API:", error);
+      console.log("خطا در فرایند رفرش توکن:", error);
       if (error?.response?.status === 400) {
         console.log(error);
       }

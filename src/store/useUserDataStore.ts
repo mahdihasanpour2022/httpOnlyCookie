@@ -94,8 +94,8 @@ export const useUserDataStore = create<NameStore>()(
           // return Promise.resolve(null);
         },
         setItem: async (key, value) => {
-          console.log("key set item in zustand runed ....", key);
-          console.log("value set item in zustand runed ....", value);
+          // console.log("key set item in zustand runed ....", key);
+          // console.log("value set item in zustand runed ....", value);
 
           // با هر تغییر استیت بلافاصله در کوکی و لوکال اپدیت میشود
           const parsedValue = value ? JSON.parse(value) : {};

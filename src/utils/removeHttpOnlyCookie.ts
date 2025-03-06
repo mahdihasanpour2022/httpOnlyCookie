@@ -1,19 +1,16 @@
-export const removeHttpOnlyCookie = ({
+export const removeHttpOnlyCookie = async ({
   cookieName,
 }: {
   cookieName: string;
 }) => {
-  fetch("http://localhost:3000/api/removeCookie", {
+  const response = await fetch("http://localhost:3000/api/removeCookie", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     credentials: "include",
     body: JSON.stringify({ cookieName }),
-  })
-    .then((response) => response.json())
-    .then((data) => console.log(`data for remove ${cookieName} cookie:`, data))
-    .catch((error) =>
-      console.error(`error for remove ${cookieName} cookie:`, error)
-    );
+  });
+  const data = await response.json();
+  return data;
 };

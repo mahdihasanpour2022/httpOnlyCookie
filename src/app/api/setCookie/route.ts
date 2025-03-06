@@ -5,13 +5,14 @@ export async function POST(request: Request) {
     const { cookieName, cookieData, options } = await request.json();
 
     if (!cookieName || !cookieData) {
-      return NextResponse.json(
-        { error: "Cookie name and data are required." },
-        { status: 400 }
-      );
+      return NextResponse.json({
+        isSuccess: false,
+        status: 400,
+        message: "نام و دیتای کوکی را وارد نکرده اید..",
+        data: null,
+      });
     }
 
-    // Parse options or set defaults
     const {
       httpOnly = true,
       secure = process.env.NEXT_PUBLIC_ENV === "production",
@@ -22,11 +23,11 @@ export async function POST(request: Request) {
       maxAge = 60 * 60 * 24 * 7,
     } = options || {};
 
-    // Set the cookie
     const response = NextResponse.json({
-      message: "Cookie set successfully",
-      cookieName,
-      cookieData,
+      isSuccess: true,
+      status: 200,
+      message: `کوکی با نام ${cookieName} با موفقیت ایجاد شد.`,
+      data: null,
     });
 
     response.cookies.set(cookieName, JSON.stringify(cookieData), {
@@ -37,12 +38,20 @@ export async function POST(request: Request) {
       maxAge,
     });
 
+    // const cookieValue = JSON.stringify(cookieData);
+    // response.headers.set(
+    //   "Set-Cookie",
+    //   `${cookieName}=${cookieValue}; HttpOnly; Path=${path}; Max-Age=${maxAge}; Secure=${secure}; SameSite=${sameSite}`
+    // );
+
     return response;
   } catch (error) {
     console.error("Error setting cookie:", error);
-    return NextResponse.json(
-      { error: "Failed to set cookie. Please check your request." },
-      { status: 500 }
-    );
+    return NextResponse.json({
+      isSuccess: false,
+      status: 500,
+      message: `کوکی ایجاد نشد.`,
+      data: null,
+    });
   }
 }

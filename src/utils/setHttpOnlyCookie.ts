@@ -9,7 +9,7 @@ export const setHttpOnlyCookie = async ({
   cookieData: object;
   options?: OptionCookie;
 }) => {
-  await fetch("http://localhost:3000/api/setCookie", {
+  const response = await fetch("http://localhost:3000/api/setCookie", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -20,10 +20,8 @@ export const setHttpOnlyCookie = async ({
       cookieData,
       options,
     }),
-  })
-    .then((response) => response.json())
-    .then((data) => console.log(`data for set ${cookieName} cookie:`, data))
-    .catch((error) =>
-      console.error(`error for set ${cookieName} cookie:`, error)
-    );
+  });
+  const data = await response.json();
+  console.log("setHttpOnlyCookie ruuuned ...", cookieName , data);
+  return data;
 };

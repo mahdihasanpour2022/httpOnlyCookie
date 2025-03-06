@@ -1,14 +1,17 @@
 "use server";
 
-import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
-export async function setCookie() {
-  const response = NextResponse.next();
-  response.cookies.set("name", "lee", {
+export async function create() {
+  const cookieStore = await cookies();
+
+  cookieStore.set({
+    name: "name",
+    value: "lee",
     httpOnly: true,
-    secure: false,
+    secure: process.env.NEXT_PUBLIC_ENV === "production",
+    sameSite: process.env.NEXT_PUBLIC_ENV === "production" ? "strict" : "lax",
     path: "/",
+    maxAge: 60 * 60 * 24 * 7,
   });
-
-  return response;
 }

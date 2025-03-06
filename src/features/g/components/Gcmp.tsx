@@ -1,20 +1,22 @@
-"use client"
-// import { useRefreshTokenDataStore } from "@/stores/useRefreshTokenDataStore";
-import { useCookie } from "@/providers/CookieContext";
+"use client";
+// import { useCookie } from "@/providers/CookieContextProvider";
+import { useRefreshTokenInitializerStore } from "@/store/useRefreshTokenInitializerStore";
 
 const Gcmp = () => {
 
-    // const refreshToken = useRefreshTokenDataStore((state) => state.refreshToken);
-    //  const { refreshToken } = refreshTokenStore();
-    // console.log("refreshToken in GCmp", refreshToken);
+  // with context
+  // const { cookie } = useCookie();
+  // console.log("Fcmp refreshToken :", cookie);
 
-    
-      const { cookie } = useCookie();
-      console.log("coolie :", cookie);
+  // with zustand
+  const cookie = useRefreshTokenInitializerStore((state) => state.cookie);
+  // console.log("Fcmp refreshToken :", cookie);
 
   return (
     <>
-      <p>salam g</p>
+      <div className="text-center font-bold">
+        {cookie ? cookie : "رفرش توکن رو نداریم"}
+      </div>
     </>
   );
 };

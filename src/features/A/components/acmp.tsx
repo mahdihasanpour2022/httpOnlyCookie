@@ -7,36 +7,41 @@ const Acmp = () => {
   // const changeData = useUserDataStore((state) => state.changeData);
   // const clearData = useUserDataStore((state) => state.clearData);
   //
-  const { data: podProfileData } = useGetPodProfile();
+  const { data: podProfileData , isLoading } = useGetPodProfile();
   // console.log("eeeeeeeeeeeeeeeeeeee :", podProfileData);
 
   // 5192640985-81106611678C4335a1e8258f1231fa28.XzIwMjUx  ===>  expired refresh
   return (
-    <div className="flex flex-col">
-      <div className="text-center border mt-16">
-        userLoginData:{JSON.stringify(userLoginData)}
-      </div>
+    <>
+      <div className="w-full h-screen flex justify-center items-center">
+        {isLoading && <p>isloading ...</p>}
+        <div className="flex flex-col">
+          <div className="text-center border mt-16">
+            userLoginData:{JSON.stringify(userLoginData)}
+          </div>
 
-      <div className="text-center">
-        name:{podProfileData?.singleResult.name}
-      </div>
+          <div className="text-center">
+            name:{podProfileData?.singleResult?.name}
+          </div>
 
-      {/* <button
+          {/* <button
         onClick={() =>
-          changeData({
-            refreshToken: "6875e83dfe3a47e1bcd8d557e6b92142.XzIwMjUx",
-            accessToken: "8308225576-14Bd892f69f04aa7b89525a838407f1d.XzIwMjUx",
-
+        changeData({
+          refreshToken: "6875e83dfe3a47e1bcd8d557e6b92142.XzIwMjUx",
+          accessToken: "8308225576-14Bd892f69f04aa7b89525a838407f1d.XzIwMjUx",
+          
           })
-        }
-      >
-        login
-      </button>
-      <button onClick={() => changeData({ name: "jafar", age: 30 })}>
-        changeData
-      </button>
-      <button onClick={() => clearData("userData")}>logout</button> */}
-    </div>
+          }
+          >
+          login
+          </button>
+          <button onClick={() => changeData({ name: "jafar", age: 30 })}>
+          changeData
+          </button>
+          <button onClick={() => clearData("userData")}>logout</button> */}
+        </div>
+      </div>
+    </>
   );
 };
 

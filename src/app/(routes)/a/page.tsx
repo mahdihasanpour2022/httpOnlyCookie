@@ -22,14 +22,18 @@ const getPodProfile = async () => {
     : null;
 
   try {
-    const { data, config } = await API.get(ApiRoutes.podProfile, {
+    const { data
+      // , config
+     } = await API.get(ApiRoutes.podProfile, {
       baseURL: process.env.NEXT_PUBLIC_API_URL,
       headers: { accessToken: `${userLoginData.accessToken}` },
     });
     console.log("data is ssr getPodProfile :", data);
     // console.log("response in getPodProfile :", config.headers["accessToken"]);
-
-    return {...data, accessToken : config.headers["accessToken"]};
+    if (!data.hasError) {
+      // return { ...data, accessToken: config.headers["accessToken"] };
+      return data ;
+    }
   } catch (error: any) {
     // console.log("error catcheddddddd :", error);
     if (error instanceof AxiosError) {
