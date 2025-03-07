@@ -19,6 +19,36 @@ const page = async () => {
     ? JSON.parse(ssrCookie.value)
     : undefined;
 
+  try {
+    await fetch("http://localhost:3000/api/setCookie", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        cookieName: "test",
+        cookieData: { accessToken: "test" },
+        options: {
+          httpOnly: false,
+          secure: false,
+          sameSite: "lax",
+          path: "/",
+          maxAge: 60 * 60 * 24 * 7,
+        },
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Cookie Set:", data);
+      })
+      .catch((error) => {
+        console.error("Error setting cookie:", error);
+      });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    console.log("error in setcookie ssr :", error);
+  }
 
   // server action  => روش 2
   // با این روش هم میشه با سرور اکشن سمت سرور کوکی رو گرفت
