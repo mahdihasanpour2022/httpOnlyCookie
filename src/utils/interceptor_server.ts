@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApiRoutes } from "@/config/apiRoutes";
 // import { Config } from "@/config/config";
 import Axios, {
@@ -215,47 +214,24 @@ const refreshAuthLogic = async (failedRequest: AxiosError) => {
         return Promise.reject();
       }
 
-      try {
-        fetch("http://localhost:3000/api/setCookie", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            cookieName: "accessToken",
-            cookieData: { accessToken: data?.data?.accessToken },
-            options: {
-              httpOnly: false,
-              secure: false,
-              sameSite: "lax",
-              path: "/",
-              maxAge: 60 * 60 * 24 * 7,
-            },
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log("Cookie Set:", data);
-          })
-          .catch((error) => {
-            console.error("Error setting cookie:", error);
-          });
-      } catch (error: any) {
-        console.log("error in setcookie ssr :", error);
-      }
-
       // try {
-      //   fetch("http://localhost:3000/api/setttttCookie", {
+      //   fetch("http://localhost:3000/api/setCookie", {
       //     method: "POST",
       //     headers: {
       //       "Content-Type": "application/json",
       //     },
+      //     credentials: "include",
       //     body: JSON.stringify({
       //       cookieName: "accessToken",
-      //       cookieData: data?.data?.accessToken,
+      //       cookieData: { accessToken: data?.data?.accessToken },
+      //       options: {
+      //         httpOnly: false,
+      //         secure: false,
+      //         sameSite: "lax",
+      //         path: "/",
+      //         maxAge: 60 * 60 * 24 * 7,
+      //       },
       //     }),
-      //     credentials: 'include',
       //   })
       //     .then((response) => response.json())
       //     .then((data) => {
