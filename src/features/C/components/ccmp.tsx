@@ -7,13 +7,14 @@ const Ccmp = () => {
   const changeData = useUserDataStore((state) => state.changeData);
   const clearData = useUserDataStore((state) => state.clearData);
 
-  const { data: podProfileData } = useGetPodProfile();
+  const { data: podProfileData, isLoading } = useGetPodProfile();
 
   console.log("eeeeeeeeeeeeeeeeeeee :", podProfileData);
 
   // 5192640985-81106611678C4335a1e8258f1231fa28.XzIwMjUx  ===>  expired refresh
   return (
     <>
+      {isLoading && <p>loading ...</p>}
       {podProfileData?.singleResult?.firstName && (
         <p className="text-center pt-6">
           {podProfileData.singleResult.firstName}

@@ -1,3 +1,5 @@
+import { ApiRoutes } from "@/config/apiRoutes";
+// import { Config } from "@/config/config";
 import Axios, {
   AxiosError,
   AxiosInstance,
@@ -5,10 +7,16 @@ import Axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 import qs from "qs";
-import { ApiRoutes } from "@/config/apiRoutes";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
-import { getCookieAction } from "@/actions/cookieActions/getCookieAction";
+// import { userDataStore } from "@/stores/useUserDataStore";
+import { cookies } from "next/headers";
+// import { setHttpOnlyCookie } from "./setHttpOnlyCookie";
+// import { getHttpOnlyCookieeeee } from "@/actions/getHttpOnlyCookieeeee";
+// import { setHttpOnlyCookieeeee } from "@/actions/setHttpOnlyCookieeeee";
+// import { getHttpOnlyCookie } from "./getHttpOnlyCookie";
+// import Cookies from "universal-cookie";
 
+// const isClient = typeof window !== "undefined";
 
 const API: AxiosInstance = Axios.create({
   // baseURL: Config.APIURL,
@@ -22,10 +30,15 @@ interface AxiosErrorProps extends AxiosError {
     _retry: boolean;
   };
 }
+// const isClient = !!(typeof window === undefined);
 
 const requestHandler = async (
   request: InternalAxiosRequestConfig
 ): Promise<InternalAxiosRequestConfig> => {
+  // !!!request.headers["Accept"] && (request.headers["Accept"] = "application/json");
+  // !!!request.headers["Content-Type"] && (request.headers["Content-Type"] = "application/json");
+
+  console.log("interceptor_server req :", request.headers.accessToken);
 
   if (!!!request.headers["Accept"]) {
     request.headers["Accept"] = "application/json";
@@ -35,8 +48,47 @@ const requestHandler = async (
     request.headers["Content-Type"] = "application/json";
   }
 
-  const userDataCookie = await getCookieAction("userData");
-  const userCookie = userDataCookie.data;
+  // ------------------------------------------------------------- csr :  add accessToken in req header with universal
+
+  // const cookie = new Cookies(String(request.headers.cookie));
+  // const user = cookie.get("userData");
+  // console.log("252525 :", user?.userLoginData?.accessToken);
+
+  // if (
+  //   user &&
+  //   user?.userLoginData?.accessToken &&
+  //   !request.headers.accessToken
+  // ) {
+  //   console.log("33333 :", user?.userLoginData?.accessToken);
+  //   request.headers.accessToken = `${user?.userLoginData?.accessToken}`;
+  // }
+
+  // ------------------------------------------------------------- csr :  add accessToken in req header with universal
+  const cookieStore = await cookies();
+  const userDataCookie = cookieStore.get("userData");
+  const userCookie = userDataCookie ? JSON.parse(userDataCookie.value) : null;
+
+  // const userDataCookieaLL = cookieStore.getAll();
+  // console.log("userDataCookieaLL ==============>:", userDataCookieaLL);
+
+  // console.log("6565655 :", userCookie.userLoginData?.accessToken, isClient);
+
+  // fetch("http://localhost:3000/api/getCookie", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({ cookieName: "myCookie" }), // ارسال نام کوکی به‌صورت داینامیک
+  // })
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     if (data.error) {
+  //       console.error(data.error);
+  //     } else {
+  //       console.log(`Cookie "${"myCookie"}" value:`, data.cookieValue);
+  //     }
+  //   })
+  //   .catch((error) => console.error("Error retrieving cookie:", error));
 
   if (
     userCookie &&
@@ -115,10 +167,21 @@ const successHandler = (response: AxiosResponse): AxiosResponse => {
 };
 
 const refreshAuthLogic = async (failedRequest: AxiosError) => {
-  const data = await getCookieAction("refreshToken");
-  if (!data.isSuccess || !data?.data?.refreshToken) {
+  const cookieStore = await cookies();
+  const refreshTokenCookie = cookieStore.get("refreshToken");
+  const { refreshToken } = refreshTokenCookie
+    ? JSON.parse(refreshTokenCookie.value)
+    : null;
+  console.log("demble in refreshAuthLogic:", refreshToken);
+
+  // باید اینجا رفرش را گرفته بدهیم به نود در ان روت مربوط به رفرش
+  if (!refreshToken) {
+    // console.log("رفرش توکن در اینترسپتور برای فرایند رفرش توکن یافت نشد");
     return Promise.reject();
   }
+
+  // const refreshTokenData = await getHttpOnlyCookieeeee("refreshToken");
+  // console.log("annnnnn 1000", refreshTokenData);
 
   return await fetch(`http://localhost:3000/api/refreshTokenSsr`, {
     method: "POST",
@@ -126,7 +189,7 @@ const refreshAuthLogic = async (failedRequest: AxiosError) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      refreshToken:data.data.refreshToken,
+      refreshToken,
     }),
     // body: JSON.stringify({}),
     credentials: "include",
@@ -143,15 +206,45 @@ const refreshAuthLogic = async (failedRequest: AxiosError) => {
         return Promise.reject();
       }
 
+      // try {
+      //   fetch("http://localhost:3000/api/setCookie", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     credentials: "include",
+      //     body: JSON.stringify({
+      //       cookieName: "accessToken",
+      //       cookieData: { accessToken: data?.data?.accessToken },
+      //       options: {
+      //         httpOnly: false,
+      //         secure: false,
+      //         sameSite: "lax",
+      //         path: "/",
+      //         maxAge: 60 * 60 * 24 * 7,
+      //       },
+      //     }),
+      //   })
+      //     .then((response) => response.json())
+      //     .then((data) => {
+      //       console.log("Cookie Set:", data);
+      //     })
+      //     .catch((error) => {
+      //       console.error("Error setting cookie:", error);
+      //     });
+      // } catch (error: any) {
+      //   console.log("error in setcookie ssr :", error);
+      // }
+
       if (failedRequest?.config?.headers) {
         failedRequest.config.headers[
           "accessToken"
         ] = `${data.data.accessToken}`;
-        // console.log(
-        //   "failedRequest laaaaaaaaaaast :",
-        //   failedRequest.config.url,
-        //   data.data.accessToken
-        // );
+        console.log(
+          "failedRequest laaaaaaaaaaast :",
+          failedRequest.config.url,
+          data.data.accessToken
+        );
         return Promise.resolve();
       }
     })
