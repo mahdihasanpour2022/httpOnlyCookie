@@ -15,8 +15,8 @@ export async function POST(request: Request) {
 
     const {
       httpOnly = true,
-      secure = process.env.NEXT_PUBLIC_ENV === "production",
-      sameSite = process.env.NEXT_PUBLIC_ENV === "production"
+      secure = process.env.NEXT_PUBLIC_ENV === 'development' ? false : true,
+      sameSite = process.env.NEXT_PUBLIC_ENV === 'development' ? false : true
         ? "strict"
         : "lax",
       path = "/",

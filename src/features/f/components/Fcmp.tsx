@@ -77,7 +77,6 @@ const Fcmp = ({ name }: { name: string | null }) => {
     console.log("result for deleteCookie :", deleteCookieResult);
   };
 
-  console.log("ENV", process.env.NEXT_PUBLIC_ENV);
 
   return (
     <>

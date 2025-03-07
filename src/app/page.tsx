@@ -59,6 +59,8 @@ export default function Home() {
   //       .catch((error) => console.error("Error retrieving cookie:", error));
   //   }, 2000);
   // }, []);
+  
+  console.log("ENV", process.env.NEXT_PUBLIC_ENV);
 
   return (
     <nav>

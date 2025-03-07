@@ -1,4 +1,3 @@
-
 export const setHttpOnlyCookie = async ({
   cookieName,
   cookieData,
@@ -10,19 +9,24 @@ export const setHttpOnlyCookie = async ({
   options?: any;
 }) => {
   // const response = await fetch("http://localhost:3000/api/setCookie", {
-    const response = await fetch("https://httponlycookieeee.netlify.app/api/setCookie", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({
-      cookieName,
-      cookieData,
-      options,
-    }),
-  });
+  const response = await fetch(
+    process.env.NEXT_PUBLIC_ENV === "development"
+      ? "http://localhost:3000/api/setCookie"
+      : "https://httponlycookieeee.netlify.app/api/setCookie",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        cookieName,
+        cookieData,
+        options,
+      }),
+    }
+  );
   const data = await response.json();
-  console.log("setHttpOnlyCookie ruuuned ...", cookieName , data);
+  console.log("setHttpOnlyCookie ruuuned ...", cookieName, data);
   return data;
 };

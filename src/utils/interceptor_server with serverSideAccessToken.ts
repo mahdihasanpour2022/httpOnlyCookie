@@ -205,24 +205,29 @@ const refreshAuthLogic = async (failedRequest: AxiosError) => {
 
   if (
     serverSideAccessToken === null ||
-    serverSideAccessToken.expireTime < Date.now()//  یعنی یا اکسس نداره یا داره ولی منقضی شده پس باید رفرش انجام بشه
+    serverSideAccessToken.expireTime < Date.now() //  یعنی یا اکسس نداره یا داره ولی منقضی شده پس باید رفرش انجام بشه
     // ||  !!(
     //   serverSideAccessToken?.userRefreshToken &&
     //   serverSideAccessToken.userRefreshToken !== userLoginData.refreshToken
     // ) // یعنی کاربره دیگری است
   ) {
     // return await fetch(`http://localhost:3000/api/refreshTokenSsr`, {
-      return await fetch(`https://httponlycookieeee.netlify.app/api/refreshTokenSsr`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        accessToken: userLoginData.accessToken,
-        refreshToken: userLoginData.refreshToken,
-      }),
-      credentials: "include",
-    })
+    return await fetch(
+      process.env.NEXT_PUBLIC_ENV === "development"
+        ? "http://localhost:3000/api/refreshTokenSsr"
+        : "https://httponlycookieeee.netlify.app/api/refreshTokenSsr",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          accessToken: userLoginData.accessToken,
+          refreshToken: userLoginData.refreshToken,
+        }),
+        credentials: "include",
+      }
+    )
       .then((res) => {
         console.log("res :", res);
         if (!res.ok) {

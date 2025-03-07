@@ -184,7 +184,9 @@ const refreshAuthLogic = async (failedRequest: AxiosError) => {
   // console.log("annnnnn 1000", refreshTokenData);
 
   // return await fetch(`http://localhost:3000/api/refreshTokenSsr`, {
-    return await fetch(`https://httponlycookieeee.netlify.app/api/refreshTokenSsr`, {
+    return await fetch(process.env.NEXT_PUBLIC_ENV === "development"
+      ? "http://localhost:3000/api/refreshTokenSsr"
+      : "https://httponlycookieeee.netlify.app/api/refreshTokenSsr", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

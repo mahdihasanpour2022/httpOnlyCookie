@@ -7,7 +7,7 @@ export async function GET() {
     // تنظیم کوکی
     response.cookies.set('test', 'some_value', {
       httpOnly: true, // فقط از سمت HTTP در دسترس است
-      secure: process.env.NODE_ENV === 'production', // در حالت تولید باید secure باشد
+      secure: process.env.NEXT_PUBLIC_ENV === 'development' ? false : true, // در حالت تولید باید secure باشد
       maxAge: 60 * 60 * 24, // کوکی به مدت 1 روز معتبر است
       path: '/', // مسیر معتبر
     });

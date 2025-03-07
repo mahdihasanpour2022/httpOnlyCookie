@@ -12,8 +12,8 @@ export async function setHttpOnlyCookieeeee({ cookieName, cookieData }: Prop) {
 
   cookieStore.set(cookieName, JSON.stringify(cookieData), {
     httpOnly: true,
-    secure: process.env.NEXT_PUBLIC_ENV === "production",
-    sameSite: process.env.NEXT_PUBLIC_ENV === "production" ? "strict" : "lax",
+    secure: process.env.NEXT_PUBLIC_ENV === 'development' ? false : true,
+    sameSite: process.env.NEXT_PUBLIC_ENV === 'development' ?  "lax" :"strict" ,
     path: "/",
     maxAge: 60 * 60 * 24 * 7, // 7 days
   });
