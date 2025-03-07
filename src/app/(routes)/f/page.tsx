@@ -19,7 +19,8 @@ const page = async () => {
     ? JSON.parse(ssrCookie.value)
     : undefined;
 
-    const response = await fetch('http://localhost:3000/api/a', {
+    // const response = await fetch('http://localhost:3000/api/a', {
+      const response = await fetch('https://httponlycookieeee.netlify.app/api/a', {
       method: 'GET',
     });
   

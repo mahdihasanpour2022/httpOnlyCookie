@@ -9,7 +9,8 @@ export const setHttpOnlyCookie = async ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options?: any;
 }) => {
-  const response = await fetch("http://localhost:3000/api/setCookie", {
+  // const response = await fetch("http://localhost:3000/api/setCookie", {
+    const response = await fetch("https://httponlycookieeee.netlify.app/api/setCookie", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

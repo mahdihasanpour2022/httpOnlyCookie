@@ -183,7 +183,8 @@ const refreshAuthLogic = async (failedRequest: AxiosError) => {
   // const refreshTokenData = await getHttpOnlyCookieeeee("refreshToken");
   // console.log("annnnnn 1000", refreshTokenData);
 
-  return await fetch(`http://localhost:3000/api/refreshTokenSsr`, {
+  // return await fetch(`http://localhost:3000/api/refreshTokenSsr`, {
+    return await fetch(`https://httponlycookieeee.netlify.app/api/refreshTokenSsr`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

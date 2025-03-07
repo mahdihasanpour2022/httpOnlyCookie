@@ -3,7 +3,8 @@ export const getHttpOnlyCookie = async ({
 }: {
   cookieName: string;
 }) => {
-  const response = await fetch("http://localhost:3000/api/getCookie", {
+  // const response = await fetch("http://localhost:3000/api/getCookie", {
+    const response = await fetch("https://httponlycookieeee.netlify.app/api/getCookie", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

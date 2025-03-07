@@ -211,7 +211,8 @@ const refreshAuthLogic = async (failedRequest: AxiosError) => {
     //   serverSideAccessToken.userRefreshToken !== userLoginData.refreshToken
     // ) // یعنی کاربره دیگری است
   ) {
-    return await fetch(`http://localhost:3000/api/refreshTokenSsr`, {
+    // return await fetch(`http://localhost:3000/api/refreshTokenSsr`, {
+      return await fetch(`https://httponlycookieeee.netlify.app/api/refreshTokenSsr`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
