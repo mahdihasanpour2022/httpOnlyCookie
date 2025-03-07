@@ -1,7 +1,9 @@
 import { create } from "zustand";
-import { ApiResponse } from "@/interfaces/apiResponse";
-import { RefreshTokenData } from "@/interfaces/refreshTokenData";
-import { getHttpOnlyCookie } from "@/utils/getHttpOnlyCookie";
+// import { ApiResponse } from "@/interfaces/apiResponse";
+// import { RefreshTokenData } from "@/interfaces/refreshTokenData";
+// import { getHttpOnlyCookie } from "@/utils/getHttpOnlyCookie";
+import { getCookieAction } from "@/actions/cookieActions/getCookieAction";
+import { ServerActionResponse } from "@/interfaces/serverActionResponse";
 
 interface CookieState {
   cookie: string | undefined;
@@ -13,15 +15,12 @@ export const useRefreshTokenInitializerStore = create<CookieState>((set) => ({
 
   fetchRefreshCookie: async () => {
     try {
-      // console.log("useRefreshTokenInitializerStore runned")
-      const data: ApiResponse<RefreshTokenData> = await getHttpOnlyCookie({
-        cookieName: "refreshToken",
-      });
+      const data :ServerActionResponse = await getCookieAction("refreshToken");
 
-      // console.log("Zustand Cookie Store:", data);
+      console.log("==============>", data);
 
       if (data.isSuccess) {
-        set({ cookie: data.data.cookieValue.refreshToken });
+        set({ cookie: data.data?.refreshToken });
       } else {
         set({ cookie: undefined });
       }

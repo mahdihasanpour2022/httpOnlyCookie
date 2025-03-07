@@ -19,11 +19,11 @@ export async function getCookieAction(
       };
     }
 
-    let parsedData : string | object;
+    let parsedData: object;
     try {
       parsedData = JSON.parse(cookieValue.value);
     } catch {
-      parsedData = cookieValue.value;
+      parsedData = { value: cookieValue.value };
     }
 
     return {
