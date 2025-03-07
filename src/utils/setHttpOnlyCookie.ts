@@ -1,4 +1,3 @@
-import { OptionCookie } from "@/interfaces/optionCookie";
 
 export const setHttpOnlyCookie = async ({
   cookieName,
@@ -7,7 +6,8 @@ export const setHttpOnlyCookie = async ({
 }: {
   cookieName: string;
   cookieData: object;
-  options?: OptionCookie;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  options?: any;
 }) => {
   const response = await fetch("http://localhost:3000/api/setCookie", {
     method: "POST",
