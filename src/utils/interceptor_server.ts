@@ -8,6 +8,7 @@ import qs from "qs";
 import { ApiRoutes } from "@/config/apiRoutes";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 import { getCookieAction } from "@/actions/cookieActions/getCookieAction";
+import { errorHandler1 } from "./errorHandler1";
 
 const API: AxiosInstance = Axios.create({
   // baseURL: Config.APIURL,
@@ -98,7 +99,7 @@ const errorHandler = (error: AxiosErrorProps) => {
     ) {
       window.location.href = "/500";
     }
-  errorHandler(error);
+  errorHandler1(error);
   return Promise.reject(error);
 };
 

@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 
-export const errorHandler = (error: AxiosError) => {
+export const errorHandler1 = (error: AxiosError) => {
   // حالا error از نوع AxiosError است نه AxiosResponse
   if (error.response) {
     // اگر پاسخ موجود است

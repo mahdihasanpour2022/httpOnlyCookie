@@ -10,7 +10,7 @@ import { AxiosError } from "axios";
 import { ApiRoutes } from "@/features/e/constants/ApiRoutes";
 import { cookies } from "next/headers";
 import API from "@/utils/interceptor_server";
-import { errorHandler } from "@/utils/errorHandler";
+import { errorHandler1 } from "@/utils/errorHandler1";
 // import Cookies from "universal-cookie";
 
 const getPodProfile = async () => {
@@ -42,7 +42,7 @@ const getPodProfile = async () => {
 
       // console.log("errorrrrrrrrrrrrrrrrr :", error);
     }
-    return errorHandler(error); // error null
+    return errorHandler1(error); // error null
   }
 };
 
