@@ -18,6 +18,15 @@ const page = async () => {
   const cookieValue = ssrCookie?.value
     ? JSON.parse(ssrCookie.value)
     : undefined;
+
+    const response = await fetch('http://localhost:3000/api/a', {
+      method: 'GET',
+    });
+  
+    const data = await response.json();
+    console.log(data.message); // چاپ پیغام در کنسول
+
+
   // این رو در لوکال تست کردم پسغام موفق یودن ست کوکی داد ولی در نتلیفای همونم نمیده
   // try {
   //   await fetch("http://localhost:3000/api/setCookie", {

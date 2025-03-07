@@ -17,7 +17,7 @@ export const useRefreshTokenInitializerStore = create<CookieState>((set) => ({
     try {
       const data :ServerActionResponse = await getCookieAction("refreshToken");
 
-      console.log("==============>", data);
+      // console.log("==============>", data);
 
       if (data.isSuccess) {
         set({ cookie: data.data?.refreshToken });
