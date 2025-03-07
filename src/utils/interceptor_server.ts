@@ -9,10 +9,10 @@ import { ApiRoutes } from "@/config/apiRoutes";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 import { getCookieAction } from "@/actions/cookieActions/getCookieAction";
 
-
 const API: AxiosInstance = Axios.create({
   // baseURL: Config.APIURL,
   baseURL: "https://kidzyshop.podland.ir/shop/api",
+  timeout: 30000,
   paramsSerializer: {
     serialize: (params) => qs.stringify(params, { arrayFormat: "brackets" }), // indices: false  https://www.npmjs.com/package/qs
   },
@@ -26,7 +26,6 @@ interface AxiosErrorProps extends AxiosError {
 const requestHandler = async (
   request: InternalAxiosRequestConfig
 ): Promise<InternalAxiosRequestConfig> => {
-
   if (!!!request.headers["Accept"]) {
     request.headers["Accept"] = "application/json";
   }
@@ -92,12 +91,6 @@ const errorHandler = (error: AxiosErrorProps) => {
       error?.response?.status === 500 &&
       originalRequest.url === ApiRoutes.refresh_token
     ) {
-      // console.log(
-      //   "vpn خود را قطع و از برقراری ارتباط اینترنت خود اطمینان حاصل نمایید."
-      // );
-      // ErrorToast({
-      //   msg: "vpn خود را قطع و از برقراری ارتباط اینترنت خود اطمینان حاصل نمایید.",
-      // });
       window.location.href = "/500";
     } else if (
       error?.response?.status === 502 ||
@@ -105,7 +98,7 @@ const errorHandler = (error: AxiosErrorProps) => {
     ) {
       window.location.href = "/500";
     }
-  // return Promise.reject(error?.response?.data); // اگر چیزی غیر از ارور کلی را ریترن کنید پکیج نصب کردی برای هندل کردن 401 نمیتواند تشخیص دهد 401 شده
+  errorHandler(error);
   return Promise.reject(error);
 };
 
@@ -126,7 +119,7 @@ const refreshAuthLogic = async (failedRequest: AxiosError) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      refreshToken:data.data.refreshToken,
+      refreshToken: data.data.refreshToken,
     }),
     // body: JSON.stringify({}),
     credentials: "include",

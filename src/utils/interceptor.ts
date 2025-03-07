@@ -19,6 +19,7 @@ import { getCookieAction } from "@/actions/cookieActions/getCookieAction";
 const API: AxiosInstance = Axios.create({
   // baseURL: Config.APIURL,
   baseURL: "https://kidzyshop.podland.ir/shop/api",
+  timeout: 30000,
   paramsSerializer: {
     serialize: (params) => qs.stringify(params, { arrayFormat: "brackets" }), // indices: false  https://www.npmjs.com/package/qs
   },
