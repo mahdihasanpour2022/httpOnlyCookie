@@ -97,11 +97,11 @@ export default function Home() {
             server___(a)
           </li>
         </Link>
-        {/* <Link href="/c">
+        <Link href="/c">
           <li className="border w-48 mx-auto py-4 rounded-full font-bold text-white border-white">
             client___(c)
           </li>
-        </Link> */}
+        </Link>
         {/* <Link href="/d">
           <li className="border w-48 mx-auto py-4 rounded-full font-bold text-white border-white">
             server___(d_3call)

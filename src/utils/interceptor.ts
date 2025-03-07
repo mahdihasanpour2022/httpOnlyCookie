@@ -10,9 +10,10 @@ import qs from "qs";
 import Cookies from "universal-cookie";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 import { userDataStore } from "@/store/useUserDataStore";
-import { getHttpOnlyCookie } from "./getHttpOnlyCookie";
-import { ApiResponse } from "@/interfaces/apiResponse";
-import { RefreshTokenData } from "@/interfaces/refreshTokenData";
+// import { getHttpOnlyCookie } from "./getHttpOnlyCookie";
+// import { ApiResponse } from "@/interfaces/apiResponse";
+// import { RefreshTokenData } from "@/interfaces/refreshTokenData";
+import { getCookieAction } from "@/actions/cookieActions/getCookieAction";
 // import { cookies } from "next/headers";
 
 const API: AxiosInstance = Axios.create({
@@ -131,17 +132,19 @@ const refreshAuthLogic = async (failedRequest: AxiosError) => {
   //   return Promise.reject();
   // }
 
-  const data: ApiResponse<RefreshTokenData> = await getHttpOnlyCookie({
-    cookieName: "refreshToken",
-  });
+  // const data: ApiResponse<RefreshTokenData> = await getHttpOnlyCookie({
+  //   cookieName: "refreshToken",
+  // });
 
-  if (!data.isSuccess || !data?.data?.cookieValue?.refreshToken) {
+  const data = await getCookieAction("refreshToken");
+
+  if (!data.isSuccess || !data?.data?.refreshToken) {
     return Promise.reject();
   }
-  // console.log("refreshToken from getHttpOnlyCookie", data);
+  console.log("refreshToken in refreshAuthLogic :", data);
 
   const formData = {
-    refreshToken: data.data.cookieValue.refreshToken,
+    refreshToken: data.data.refreshToken,
   };
 
   return await Axios.post(
@@ -151,33 +154,25 @@ const refreshAuthLogic = async (failedRequest: AxiosError) => {
     { headers: formData }
   )
     .then(({ status, data }) => {
-      // console.log("c100");
       if (status === 200) {
-        // console.log("c200");
         if (
           data?.singleResult?.accessToken &&
           data?.singleResult?.refreshToken
         ) {
-          // in csr cookie tokens is uodated
-          const {
-            changeData,
-            // , userLoginData
-          } = userDataStore();
-          // console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", userLoginData);
+          console.log("refreshed data  :", data);
+
+          const { changeData } = userDataStore();
 
           changeData({
             accessToken: data.singleResult.accessToken,
             refreshToken: data.singleResult.refreshToken,
           });
 
-          // failedRequest.response.config.headers["accessToken"] = `${data.singleResult.accessToken}`;
-          // return Promise.resolve();
-
           if (failedRequest?.config?.headers && data.singleResult.accessToken) {
             failedRequest.config.headers[
               "accessToken"
             ] = `${data.singleResult.accessToken}`;
-            // console.log("failedRequest laaaaaaaaaaast :", failedRequest);
+            console.log("failedRequest laaaaaaaaaaast :", failedRequest);
             return Promise.resolve();
           }
         }
