@@ -141,6 +141,37 @@ const refreshAuthLogic = async (failedRequest: AxiosError) => {
         return Promise.reject();
       }
 
+      // hereeeeeeeeeee
+
+      fetch("http://localhost:3000/api/an", {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer my-token",
+        },
+        credentials: "include",
+      })
+        .then((res) => res.text())
+        .then((data) => console.log(data))
+        .catch((err) => console.error("Error:", err));
+
+      // fetch("http://localhost:3000/api/an", {
+      //   method: "GET",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: "Bearer my-token",
+      //   },
+      //   body: JSON.stringify({ cookieName: "myCookie" }),
+      // })
+      //   .then((response) => response.json())
+      //   .then((data) => {
+      //     if (data.error) {
+      //       console.error(data.error);
+      //     } else {
+      //       console.log(`Cookie "${"myCookie"}" value:`, data.cookieValue);
+      //     }
+      //   })
+      //   .catch((error) => console.error("Error retrieving cookie:", error));
+
       if (failedRequest?.config?.headers) {
         failedRequest.config.headers[
           "accessToken"
